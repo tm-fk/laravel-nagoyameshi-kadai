@@ -11,26 +11,15 @@ class UserController extends Controller
 {
     public function index(Request $request) {
 
-    //検索キーワードの取得
-    $keyword = $request->input('keyword');
-
-    //クエリの作成
-    $query = User::query();
-
-    //検索条件の適用
-    if ($keyword) {
-        $query->where(function($q) use ($keyword) {
-            $q->where('name','LIKE',"%{$keyword}%")
-             ->orWhere('kane','LIKE',"%{$keyword}%");
-        });
-    }
-
-    //ページネーションの適用
-    $users = $query->paginate(10);
-
-    //取得したデータの総数
-    $total = $users->total();
-
+        $keyword = $request->input('keyword');
+        if($keyword != null){
+          $users = User::where('name', 'like', "%{$keyword}%")->paginate(15);
+          $total = User::where('name', 'like', "%{$keyword}%")->count();
+        }else{
+          $users = User::paginate(15);
+          $total = User::all()->count();
+        }
+        
     //ビューにデータを渡す
     return view('admin.users.index', compact('users','keyword','total'));
 }

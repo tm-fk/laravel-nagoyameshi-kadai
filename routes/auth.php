@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserConstroller;
 
 Route::middleware(['guest','guest:admin'])->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -69,4 +70,5 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth:admin')->group(function () {
     Route::post('admin/logout', [Admin\Auth\AuthenticatedSessionController::class, 'destroy'])
                 ->name('admin.logout');
+                Route::get('admin/get', [Admin\UserController::class, 'index'])->name('admin.users.index');
 });
