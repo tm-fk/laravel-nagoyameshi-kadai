@@ -115,7 +115,7 @@ class RestaurantController extends Controller
             'closing_time' => 'required|after:opening_time',
             'seating_capacity' => 'required|numeric|min:0'
         ]);
-         
+
         $restaurant->name = $request->input('name');
         $restaurant->description = $request->input('description');
         $restaurant->lowest_price = $request->input('lowest_price');
@@ -129,13 +129,11 @@ class RestaurantController extends Controller
         if($request->hasFile('image')) {
             $image = $request->file('image')->store('public/restaurants');
             $restaurant->image = basename($image);
-        }
+        }     
 
-        
+        $restaurant->save();
 
-        $restaurant->update();
-
-        return redirect()->route('admin.restaurants.show',['restaurant' => $restaurant->id])->with('flash_message', '店舗を編集しました。');
+        return redirect()->route('admin.restaurants.show', $restaurant)->with('flash_message', '店舗を編集しました。');
     }
 
     /**
@@ -145,7 +143,7 @@ class RestaurantController extends Controller
     {
         $restaurant->delete();
 
-        return redirect()->route('admin.restaurants.index', compact('restaurant'))->with('flash_message', '店舗を削除しました。');
+        return redirect()->route('admin.restaurants.index')->with('flash_message', '店舗を削除しました。');
 
     }
 }
