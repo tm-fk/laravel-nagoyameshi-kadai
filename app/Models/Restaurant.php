@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class Restaurant extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'id',
         'name',
         'description',
         'lowest_price',
@@ -21,5 +21,10 @@ class Restaurant extends Model
         'closing_time',
         'seating_capacity',
     ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_restaurant', 'restaurant_id', 'category_id');
+    }
 
 }

@@ -130,8 +130,7 @@ class RestaurantController extends Controller
             $image = $request->file('image')->store('public/restaurants');
             $restaurant->image = basename($image);
         }     
-
-        $restaurant->save();
+                $restaurant->update();
 
         return redirect()->route('admin.restaurants.show', $restaurant)->with('flash_message', '店舗を編集しました。');
     }
@@ -143,7 +142,7 @@ class RestaurantController extends Controller
     {
         $restaurant->delete();
 
-        return redirect()->route('admin.restaurants.index')->with('flash_message', '店舗を削除しました。');
+        return redirect()->route('admin.restaurants.index', $restaurant)->with('flash_message', '店舗を削除しました。');
 
     }
 }

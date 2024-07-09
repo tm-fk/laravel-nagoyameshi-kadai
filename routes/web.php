@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\RestaurantController;
+use App\Http\Controllers\Admin\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,9 +40,12 @@ Route::controller(RestaurantController::class)->group(function () {
     Route::get('/admin/restaurants/edit/{restaurant}', 'edit')->name('admin.restaurants.edit');
     Route::get('/admin/restaurants/create', 'create')->name('admin.restaurants.create');
      Route::post('/admin/restaurants/store', 'store')->name('admin.restaurants.store');
-    Route::delete('/admin/restaurants/destroy', 'destroy')->name('admin.restaurants.destroy');
-    Route::patch('/admin/restaurants/update', 'update')->name('admin.restaurants.update');
+    Route::delete('/admin/restaurants/destroy/{restaurant}', 'destroy')->name('admin.restaurants.destroy');
+    Route::patch('/admin/restaurants/update/{restaurant}', 'update')->name('admin.restaurants.update');
 });
+
+
+Route::resource('admin/categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy'])->names('admin.categories');
 
 
 
