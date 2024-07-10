@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Category;
 
 
 class RestaurantController extends Controller
@@ -34,7 +35,8 @@ class RestaurantController extends Controller
      */
     public function create()
     {
-        return view ('admin.restaurants.create');
+        $categories = Category::all();
+        return view ('admin.restaurants.create', compact('categories'));
     }
 
     /**
@@ -76,6 +78,10 @@ class RestaurantController extends Controller
 
         $restaurant->save();
 
+        $category_ids = array_filter($request->input('category_ids'));
+        $restaurant->categories()->sync($category_ids);
+
+
         return redirect()->route('admin.restaurants.index', compact('restaurant'))->with('flash_message', '店舗を登録しました。');
 
 
@@ -94,7 +100,12 @@ class RestaurantController extends Controller
      */
     public function edit(Restaurant $restaurant)
     {
-        return view ('admin.restaurants.edit', compact('restaurant'));
+
+        $categories = Category::all();
+        $category_ids = $restaurant->categories->pluck('id')->toArray();
+
+
+        return view ('admin.restaurants.edit', compact('restaurant', 'categories', 'category_ids' ));
     }
 
     /**
@@ -131,6 +142,9 @@ class RestaurantController extends Controller
             $restaurant->image = basename($image);
         }     
                 $restaurant->update();
+
+                $category_ids = array_filter($request->input('category_ids'));
+                $restaurant->categories()->sync($category_ids); 
 
         return redirect()->route('admin.restaurants.show', $restaurant)->with('flash_message', '店舗を編集しました。');
     }
