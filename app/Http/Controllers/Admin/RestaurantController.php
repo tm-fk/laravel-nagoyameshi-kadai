@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Restaurant;
+use App\Models\RegularHoliday; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
@@ -36,7 +37,9 @@ class RestaurantController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view ('admin.restaurants.create', compact('categories'));
+
+        $regular_holidays = RegularHoliday::all();
+        return view ('admin.restaurants.create', compact('categories','regular_holidays'));
     }
 
     /**
@@ -81,6 +84,9 @@ class RestaurantController extends Controller
         $category_ids = array_filter($request->input('category_ids'));
         $restaurant->categories()->sync($category_ids);
 
+        $regular_holiday_ids = array_filter($request->input('regular_holiday_ids'));
+        $regular_holiday_restaurant->regular_holidays()->sync($regular_holiday_ids);
+
 
         return redirect()->route('admin.restaurants.index', compact('restaurant'))->with('flash_message', '店舗を登録しました。');
 
@@ -104,8 +110,8 @@ class RestaurantController extends Controller
         $categories = Category::all();
         $category_ids = $restaurant->categories->pluck('id')->toArray();
 
-
-        return view ('admin.restaurants.edit', compact('restaurant', 'categories', 'category_ids' ));
+        $regular_holidays = RegularHoliday::all();
+        return view ('admin.restaurants.edit', compact('restaurant', 'categories', 'category_ids','regular_holidays' ));
     }
 
     /**
@@ -145,6 +151,9 @@ class RestaurantController extends Controller
 
                 $category_ids = array_filter($request->input('category_ids'));
                 $restaurant->categories()->sync($category_ids); 
+
+                $regular_holiday_ids = array_filter($request->input('regular_holiday_ids'));
+                $regular_holiday_restaurant->regular_holidays()->sync($regular_holiday_ids);
 
         return redirect()->route('admin.restaurants.show', $restaurant)->with('flash_message', '店舗を編集しました。');
     }
