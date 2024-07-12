@@ -6,6 +6,10 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\TermController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,5 +51,15 @@ Route::controller(RestaurantController::class)->group(function () {
 
 Route::resource('admin/categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy'])->names('admin.categories');
 
+Route::prefix('admin/company')->group(function () {
+    Route::get('/index', [CompanyController::class, 'index'])->name('admin.company.index');
+    Route::get('/edit', [CompanyController::class, 'edit'])->name('admin.company.edit');
+    Route::patch('/edit', [CompanyController::class, 'update'])->name('admin.company.update');
+});
 
+Route::prefix('admin/terms')->group(function () {
+    Route::get('/index', [TermController::class, 'index'])->name('admin.terms.index');
+    Route::get('/edit', [TermController::class, 'edit'])->name('admin.terms.edit');
+    Route::patch('/edit', [TermController::class, 'update'])->name('admin.terms.update');
+});
 
