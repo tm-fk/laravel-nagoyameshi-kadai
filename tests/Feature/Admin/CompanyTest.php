@@ -13,6 +13,8 @@ use Carbon\Carbon;
 
 class CompanyTest extends TestCase
 {
+    use RefreshDatabase;
+
     //未ログインのユーザーは管理者側の会社概要ページにアクセスできない
     public function test_unauthenticated_user_cannot_access_admin_company_page(): void 
     {

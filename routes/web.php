@@ -25,6 +25,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware('auth');
+
+
 
 
 require __DIR__.'/auth.php';
@@ -51,13 +56,13 @@ Route::controller(RestaurantController::class)->group(function () {
 
 Route::resource('admin/categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy'])->names('admin.categories');
 
-Route::prefix('admin/company')->group(function () {
+Route::prefix('admin/company')->middleware('auth:admin')->group(function () {
     Route::get('/index', [CompanyController::class, 'index'])->name('admin.company.index');
     Route::get('/edit', [CompanyController::class, 'edit'])->name('admin.company.edit');
     Route::patch('/edit', [CompanyController::class, 'update'])->name('admin.company.update');
 });
 
-Route::prefix('admin/terms')->group(function () {
+Route::prefix('admin/terms')->middleware('auth:admin')->group(function () {
     Route::get('/index', [TermController::class, 'index'])->name('admin.terms.index');
     Route::get('/edit', [TermController::class, 'edit'])->name('admin.terms.edit');
     Route::patch('/edit', [TermController::class, 'update'])->name('admin.terms.update');
