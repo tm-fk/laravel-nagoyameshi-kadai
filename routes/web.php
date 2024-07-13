@@ -68,3 +68,7 @@ Route::prefix('admin/terms')->middleware('auth:admin')->group(function () {
     Route::patch('/edit', [TermController::class, 'update'])->name('admin.terms.update');
 });
 
+Route::group(['middleware' => 'guest:admin'], function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+});
+
