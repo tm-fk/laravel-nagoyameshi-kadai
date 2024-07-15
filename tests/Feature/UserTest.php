@@ -42,13 +42,12 @@ class UserTest extends TestCase
         $admin->password = Hash::make('nagoyameshi');
         $admin->save();
      
-        $response = $this->post('admin/login', [
-            'email' => $admin->email,
-            'password' => 'nagoyameshi',
-        ]);
+        // $response = $this->post('admin/login', [
+        //     'email' => $admin->email,
+        //     'password' => 'nagoyameshi',
+        // ]);
         
         $response = $this->actingAs($admin)->get(route('user.index'));
-
         $response->assertStatus(302);
         $response->assertRedirect('admin/home');
     }

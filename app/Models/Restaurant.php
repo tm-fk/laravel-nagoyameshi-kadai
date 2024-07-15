@@ -9,7 +9,7 @@ use App\Models\Category;
 
 class Restaurant extends Model
 {
-    use HasFactory;
+    use HasFactory,Sortable;
 
     protected $fillable = [
         'name',

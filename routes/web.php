@@ -5,11 +5,11 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Admin\RestaurantController;
+use App\Http\Controllers\Admin\RestaurantController as AdminRestaurantController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\TermController;
-
+use App\Http\Controllers\RestaurantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,5 +72,8 @@ Route::prefix('admin/terms')->middleware('auth:admin')->group(function () {
 Route::group(['middleware' => 'guest:admin'], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::resource('user', UserController::class)->only(['index', 'edit', 'update'])->middleware(['auth', 'verified'])->names('user');
+    Route::resource('restaurants', RestaurantController::class)->only(['index', 'show'])->names('restaurants');
 });
+
+
 
