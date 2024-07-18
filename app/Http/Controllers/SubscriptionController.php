@@ -20,6 +20,8 @@ class SubscriptionController extends Controller
 
     public function store(Request $request) {
 
+        $user = Auth::user();
+        
             $request->user()->newSubscription(
                  'premiun_plan','price_1Pd5NsGXYBip193mW5Sox4GG'
             )->create($request->paymentMethodId);
@@ -29,15 +31,17 @@ class SubscriptionController extends Controller
       }
 
     public function edit(User $user) {
-        $user = User::get();
+        $user = Auth::user();
 
-        $intent = Auth::user()->createSetupIntent();
+        $intent = $user->createSetupIntent();
 
 
         return view('subscription.edit', compact('user','intent'));
     }
 
     public function update(Request $request , User $user) {
+
+        $user = Auth::user();
 
         $user->updateDefaultPaymentMethod($request->paymentMethodId);
 
@@ -52,6 +56,8 @@ class SubscriptionController extends Controller
     }
 
     public function destroy(User $user) {
+
+
 
         $user->subscription('premium_plan')->cancelNow();
 
