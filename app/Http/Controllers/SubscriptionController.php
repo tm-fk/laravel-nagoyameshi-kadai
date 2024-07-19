@@ -20,14 +20,14 @@ class SubscriptionController extends Controller
 
     public function store(Request $request) {
 
-        $user = Auth::user();
-        
+        $user = $request->user();
+
             $request->user()->newSubscription(
-                 'premiun_plan','price_1Pd5NsGXYBip193mW5Sox4GG'
+                 'premium_plan','price_1Pd5NsGXYBip193mW5Sox4GG'
             )->create($request->paymentMethodId);
         
 
-            return redirect()->route('user.index')->with('flash_message','有料プランの登録が完了しました。');
+            return redirect()->route('home')->with('flash_message','有料プランの登録が完了しました。');
       }
 
     public function edit(User $user) {
@@ -39,14 +39,14 @@ class SubscriptionController extends Controller
         return view('subscription.edit', compact('user','intent'));
     }
 
-    public function update(Request $request , User $user) {
+    public function update(Request $request) {
 
-        $user = Auth::user();
+        $user = $request->user();
 
         $user->updateDefaultPaymentMethod($request->paymentMethodId);
 
 
-        return redirect()->route('user.index', compact('user'))->with('flash_message','お支払方法を変更しました。');
+        return redirect()->route('home')->with('flash_message','お支払方法を変更しました。');
 
     }
 
@@ -55,15 +55,19 @@ class SubscriptionController extends Controller
         return view('subscription.cancel');
     }
 
-    public function destroy(User $user) {
+    public function destroy(Request $request) {
 
+        $user = $request->user();
 
+        if (!$user->hasStripeId()) {
+            $user->createAsStripeCustomer();
+        }
 
         $user->subscription('premium_plan')->cancelNow();
 
         $user->delete();
 
-        return redirect()->route('user.index', compact('user'))->with('flash_message','有料プランを解約しました。');
+        return redirect()->route('home')->with('flash_message','有料プランを解約しました。');
 
 
     }

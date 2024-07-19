@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Laravel\Cashier\Billable;
+use Illuminate\Support\Facades\Auth;
+
 class Subscribed
 {
     /**
@@ -15,6 +17,7 @@ class Subscribed
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $user = Auth::user();
 
         if (! $request->user()?->subscribed('premium_plan')){
             return redirect('subscription/create');

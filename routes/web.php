@@ -79,28 +79,28 @@ Route::group(['middleware' => 'guest:admin'], function () {
     
 });
 
-// Route::group(['middleware' => 'guest:admin'], function () {
-//     Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->middleware(['auth', 'verified'])->name('subscription.edit');
-//     Route::patch('subscription', [SubscriptionController::class, 'update'])->middleware(['auth', 'verified'])->name('subscription.update');
-//     Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->middleware(['auth', 'verified'])->name('subscription.cancel');
-//     Route::delete('subscription', [SubscriptionController::class, 'destroy'])->middleware(['auth', 'verified'])->name('subscription.destroy');
-// })->middleware([Subscribed::class]);
-
-// Route::group(['middleware' => 'guest:admin'], function () {
-//     Route::get('subscription/create', [SubscriptionController::class, 'create'])->middleware(['auth', 'verified'])->name('subscription.create');
-//     Route::post('subscription', [SubscriptionController::class, 'store'])->middleware(['auth', 'verified'])->name('subscription.store');
-// })->middleware([NotSubscribed::class]);
-
-
-Route::middleware('auth', 'verified', 'subscribed')->group(function () {
+ //一般ユーザとしてログイン済かつメール認証済で有料プラン未登録の場合
+ Route::group(['middleware' => [NotSubscribed::class]], function () {
+    Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
+    Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
+});
+//一般ユーザとしてログイン済かつメール認証済で有料プラン登録済の場合
+Route::group(['middleware' => [Subscribed::class]], function () {
     Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
     Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
     Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
     Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 });
 
-Route::middleware('auth', 'verified', 'not.subscribed')->group(function () {
-    Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
-    Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
-});
+// Route::middleware('auth', 'verified', 'subscribed')->group(function () {
+//     Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
+//     Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
+//     Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
+//     Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
+// });
+
+// Route::middleware('auth', 'verified', 'not.subscribed')->group(function () {
+//     Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
+//     Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
+// });
 
