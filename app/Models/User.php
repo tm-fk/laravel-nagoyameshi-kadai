@@ -54,4 +54,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function review()
+    {
+        return $this->hasMany(Review::class);
+    }
 }
