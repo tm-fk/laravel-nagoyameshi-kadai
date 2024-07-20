@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Restaurant;
 
 class ReviewController extends Controller
 {
@@ -26,9 +27,8 @@ class ReviewController extends Controller
             }
         
             if  (! $request->user()?->subscribed('premium_plan')) { 
-                $reviews = Review::whereHas('restaurant', function($query) use ($restaurant){
-                    $query->where('restaurants.id', $restaurant->id);
-                    })->sortable($sort_query)->orderBy('created_at', 'desc')->limit(3)->get(); // ->get() を追加
+                    $reviews = Review::where('restaurant_id', $restaurant->id)->orderBy('created_at', 'desc')->take(3)->get();
+
             } else {
                 $reviews = Review::whereHas('restaurant', function($query) use ($restaurant){
                     $query->where('restaurants.id', $restaurant->id);
