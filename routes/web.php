@@ -76,8 +76,8 @@ Route::group(['middleware' => 'guest:admin'], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::resource('user', UserController::class)->only(['index', 'edit', 'update'])->middleware(['auth', 'verified'])->names('user');
     Route::resource('restaurants', RestaurantController::class)->only(['index', 'show'])->names('restaurants');
-    
     Route::resource('restaurants.reviews', ReviewController::class)->only(['index']);
+    
 });
 
 
@@ -93,6 +93,10 @@ Route::group(['middleware' => [Subscribed::class]], function () {
     Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
     Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 
-    Route::resource('restaurants.reviews', ReviewController::class)->only(['create','store','edit','update','destroy']);
+    Route::resource('restaurants.reviews', ReviewController::class)
+    ->parameters(['reviews' => 'review'])
+    ->scoped(['review' => 'id'])
+    ->only(['create', 'store', 'edit', 'update', 'destroy']);
+
 });
 
