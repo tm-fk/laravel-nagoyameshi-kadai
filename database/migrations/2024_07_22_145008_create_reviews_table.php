@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('score')->unsigned();
             $table->foreignId('restaurant_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
