@@ -14,6 +14,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Middleware\Subscribed;
 use App\Http\Middleware\NotSubscribed;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ReservationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -93,10 +94,18 @@ Route::group(['middleware' => [Subscribed::class]], function () {
     Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
     Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 
+
+    Route::get('reservations', [ReservationController::class, 'index'])->name('reservations.index');
+    Route::get('restaurants/{restaurant}/reservations/create', [ReservationController::class, 'create'])->name('restaurants.reservations.create');
+    Route::post('restaurants/{restaurant}/reservations', [ReservationController::class, 'store'])->name('restaurants.reservations.store');
+    Route::delete('reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+  
     Route::resource('restaurants.reviews', ReviewController::class)
     ->parameters(['reviews' => 'review'])
     ->scoped(['review' => 'id'])
     ->only(['create', 'store', 'edit', 'update', 'destroy']);
 
+
+    
 });
 
