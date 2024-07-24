@@ -74,13 +74,19 @@ Route::prefix('admin/terms')->middleware('auth:admin')->group(function () {
     Route::patch('/edit', [TermController::class, 'update'])->name('admin.terms.update');
 });
 
+
 Route::group(['middleware' => 'guest:admin'], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::resource('user', UserController::class)->only(['index', 'edit', 'update'])->middleware(['auth', 'verified'])->names('user');
     Route::resource('restaurants', RestaurantController::class)->only(['index', 'show'])->names('restaurants');
     Route::resource('restaurants.reviews', ReviewController::class)->only(['index']);
     
 });
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::resource('user', UserController::class)->only(['index', 'edit', 'update']);
+
+    Route::resource('restaurants.reviews', ReviewController::class)->only(['index']);
+
 
 
 //一般ユーザとしてログイン済かつメール認証済で有料プラン未登録の場合
@@ -101,10 +107,6 @@ Route::group(['middleware' => [Subscribed::class]], function () {
     Route::post('restaurants/{restaurant}/reservations', [ReservationController::class, 'store'])->name('restaurants.reservations.store');
     Route::delete('reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
   
-    Route::resource('restaurants.reviews', ReviewController::class)
-    ->parameters(['reviews' => 'review'])
-    ->scoped(['review' => 'id'])
-    ->only(['create', 'store', 'edit', 'update', 'destroy']);
 
     Route::get('/favorites',[FavoriteController::class, 'index'])->name('favorites.index');
     Route::post('/favorites/{restaurant_id}',[FavoriteController::class, 'store'])->name('favorites.store');
@@ -112,3 +114,4 @@ Route::group(['middleware' => [Subscribed::class]], function () {
     
 });
 
+});
