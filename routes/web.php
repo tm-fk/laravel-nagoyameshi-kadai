@@ -30,13 +30,13 @@ use App\Http\Controllers\TermController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware('auth');
 
 
 
@@ -47,35 +47,50 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
     Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
     Route::get('admin/index', [Admin\UserController::class, 'index'])->name('users.index');
     Route::get('admin/show={user}', [Admin\UserController::class, 'show'])->name('users.show');
+//Restaunrant
+Route::resource('restaurants', Admin\RestaurantController::class);
+
+//Category
+Route::resource('categories', Admin\CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
+
+//Company
+Route::resource('company', Admin\CompanyController::class)->only(['index', 'edit', 'update']);
+
+//Term
+Route::resource('terms', Admin\TermController::class)->only(['index', 'edit', 'update']);
+
 });
+
+
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/member-list', 'MemberController@index')->name('member.list');
 });
 
-Route::controller(RestaurantController::class)->group(function () {
-    Route::get('/admin/restaurants/index', 'index')->name('admin.restaurants.index');
-    Route::get('/admin/restaurants/show/{restaurant}', 'show')->name('admin.restaurants.show');
-    Route::get('/admin/restaurants/edit/{restaurant}', 'edit')->name('admin.restaurants.edit');
-    Route::get('/admin/restaurants/create', 'create')->name('admin.restaurants.create');
-     Route::post('/admin/restaurants/store', 'store')->name('admin.restaurants.store');
-    Route::delete('/admin/restaurants/destroy/{restaurant}', 'destroy')->name('admin.restaurants.destroy');
-    Route::patch('/admin/restaurants/update/{restaurant}', 'update')->name('admin.restaurants.update');
-});
+// Route::controller(RestaurantController::class)->group(function () {
+//     Route::get('/admin/restaurants/index', 'index')->name('admin.restaurants.index');
+//     Route::get('/admin/restaurants/show/{restaurant}', 'show')->name('admin.restaurants.show');
+//     Route::get('/admin/restaurants/edit/{restaurant}', 'edit')->name('admin.restaurants.edit');
+//     Route::get('/admin/restaurants/create', 'create')->name('admin.restaurants.create');
+//      Route::post('/admin/restaurants/store', 'store')->name('admin.restaurants.store');
+//     Route::delete('/admin/restaurants/destroy/{restaurant}', 'destroy')->name('admin.restaurants.destroy');
+//     Route::patch('/admin/restaurants/update/{restaurant}', 'update')->name('admin.restaurants.update');
+// });
 
 
-Route::resource('admin/categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy'])->names('admin.categories');
+// Route::resource('admin/categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy'])->names('admin.categories');
 
-Route::prefix('admin/company')->middleware('auth:admin')->group(function () {
-    Route::get('/index', [CompanyController::class, 'index'])->name('admin.company.index');
-    Route::get('/edit', [CompanyController::class, 'edit'])->name('admin.company.edit');
-    Route::patch('/edit', [CompanyController::class, 'update'])->name('admin.company.update');
-});
+// Route::prefix('admin/company')->middleware('auth:admin')->group(function () {
+//     Route::get('/index', [CompanyController::class, 'index'])->name('admin.company.index');
+//     Route::get('/edit', [CompanyController::class, 'edit'])->name('admin.company.edit');
+//     Route::patch('/edit', [CompanyController::class, 'update'])->name('admin.company.update');
+// });
 
-Route::prefix('admin/terms')->middleware('auth:admin')->group(function () {
-    Route::get('/index', [TermController::class, 'index'])->name('admin.terms.index');
-    Route::get('/edit', [TermController::class, 'edit'])->name('admin.terms.edit');
-    Route::patch('/edit', [TermController::class, 'update'])->name('admin.terms.update');
-});
+// Route::prefix('admin/terms')->middleware('auth:admin')->group(function () {
+//     Route::get('/index', [TermController::class, 'index'])->name('admin.terms.index');
+//     Route::get('/edit', [TermController::class, 'edit'])->name('admin.terms.edit');
+//     Route::patch('/edit', [TermController::class, 'update'])->name('admin.terms.update');
+// });
 
 
 Route::group(['middleware' => 'guest:admin'], function () {
