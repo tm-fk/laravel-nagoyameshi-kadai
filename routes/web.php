@@ -108,6 +108,7 @@ Route::group(['middleware' => [Subscribed::class]], function () {
     Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
     Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 
+    Route::resource('restaurants.reviews', ReviewController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
 
     Route::get('reservations', [ReservationController::class, 'index'])->name('reservations.index');
     Route::get('restaurants/{restaurant}/reservations/create', [ReservationController::class, 'create'])->name('restaurants.reservations.create');
