@@ -7,8 +7,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\RestaurantController as AdminRestaurantController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\CompanyController;
-use App\Http\Controllers\Admin\TermController;
+use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
+use App\Http\Controllers\Admin\TermController as AdminTermController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Middleware\Subscribed;
@@ -16,6 +16,9 @@ use App\Http\Middleware\NotSubscribed;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\TermController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -81,6 +84,10 @@ Route::group(['middleware' => 'guest:admin'], function () {
     Route::resource('restaurants.reviews', ReviewController::class)->only(['index']);
     
 });
+
+Route::get('company', [CompanyController::class, 'index'])->name('company.index');
+
+Route::get('terms', [TermController::class, 'index'])->name('terms.index');
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('user', UserController::class)->only(['index', 'edit', 'update']);
