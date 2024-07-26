@@ -16,6 +16,7 @@ class RestaurantController extends Controller
         $keyword = $request->keyword;
         $category_id = $request->category_id;
         $price = $request->price;
+        $sort = $request->input('sort', 'created_at desc');
         
         $sorts = [
             '掲載日が新しい順' => 'created_at desc',
